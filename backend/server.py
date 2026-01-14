@@ -314,14 +314,225 @@ async def get_universes():
     }
 
 @api_router.post("/universes")
-async def create_universe(universe: UniverseCreate):
+async def create_universe(universe: UniverseCreate, current_user: dict = Depends(get_current_user)):
     universe_dict = universe.model_dump()
+    universe_dict["author"] = current_user["username"]
+    universe_dict["author_email"] = current_user["email"]
+    universe_dict["status"] = "active"
     universe_dict["created_at"] = datetime.now(timezone.utc).isoformat()
     
     result = await db.universes.insert_one(universe_dict)
     universe_dict["_id"] = str(result.inserted_id)
     
     return universe_dict
+
+@api_router.get("/universes/{universe_id}")
+async def get_universe(universe_id: str):
+    universe = await db.universes.find_one({"title": universe_id}, {"_id": 0})
+    if not universe:
+        raise HTTPException(status_code=404, detail="Universe not found")
+    return universe
+
+@api_router.get("/universes/filter/{genre}")
+async def filter_universes_by_genre(genre: str):
+    universes = await db.universes.find({"genre": genre}, {"_id": 0}).to_list(1000)
+    return universes
+
+
+# ========== STORIES/CHAPTERS ROUTES ==========
+
+@api_router.get("/stories/{universe_id}")
+async def get_stories_by_universe(universe_id: str):
+    stories = await db.stories.find({"universe_id": universe_id}, {"_id": 0}).sort("chapter_number", 1).to_list(1000)
+    return stories
+
+@api_router.get("/stories/{universe_id}/{chapter_number}")
+async def get_story_chapter(universe_id: str, chapter_number: int):
+    story = await db.stories.find_one({"universe_id": universe_id, "chapter_number": chapter_number}, {"_id": 0})
+    if not story:
+        raise HTTPException(status_code=404, detail="Chapter not found")
+    return story
+
+@api_router.post("/stories")
+async def create_story(story: StoryCreate, current_user: dict = Depends(get_current_user)):
+    story_dict = story.model_dump()
+    story_dict["author"] = current_user["username"]
+    story_dict["author_email"] = current_user["email"]
+    story_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.stories.insert_one(story_dict)
+    story_dict["_id"] = str(result.inserted_id)
+    
+    return story_dict
+
+@api_router.put("/stories/{story_id}")
+async def update_story(story_id: str, story: StoryCreate, current_user: dict = Depends(get_current_user)):
+    # Update story
+    await db.stories.update_one(
+        {"_id": story_id, "author_email": current_user["email"]},
+        {"$set": story.model_dump()}
+    )
+    return {"message": "Story updated"}
+
+
+# ========== CHARACTERS ROUTES ==========
+
+@api_router.get("/characters/{universe_id}")
+async def get_characters(universe_id: str):
+    characters = await db.characters.find({"universe_id": universe_id}, {"_id": 0}).to_list(1000)
+    return characters
+
+@api_router.post("/characters")
+async def create_character(character: CharacterCreate, current_user: dict = Depends(get_current_user)):
+    character_dict = character.model_dump()
+    character_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.characters.insert_one(character_dict)
+    character_dict["_id"] = str(result.inserted_id)
+    
+    return character_dict
+
+
+# ========== LORE ROUTES ==========
+
+@api_router.get("/lore/{universe_id}")
+async def get_lore(universe_id: str):
+    lore_entries = await db.lore.find({"universe_id": universe_id}, {"_id": 0}).to_list(1000)
+    return lore_entries
+
+@api_router.post("/lore")
+async def create_lore(lore: LoreEntryCreate, current_user: dict = Depends(get_current_user)):
+    lore_dict = lore.model_dump()
+    lore_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.lore.insert_one(lore_dict)
+    lore_dict["_id"] = str(result.inserted_id)
+    
+    return lore_dict
+
+
+# ========== CLUBS ROUTES ==========
+
+@api_router.get("/clubs")
+async def get_clubs():
+    clubs = await db.clubs.find({}, {"_id": 0}).to_list(1000)
+    return clubs
+
+@api_router.post("/clubs")
+async def create_club(club: ClubCreate, current_user: dict = Depends(get_current_user)):
+    club_dict = club.model_dump()
+    club_dict["creator"] = current_user["username"]
+    club_dict["members"] = [current_user["email"]]
+    club_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.clubs.insert_one(club_dict)
+    club_dict["_id"] = str(result.inserted_id)
+    
+    return club_dict
+
+@api_router.post("/clubs/{club_id}/join")
+async def join_club(club_id: str, current_user: dict = Depends(get_current_user)):
+    await db.clubs.update_one(
+        {"_id": club_id},
+        {"$addToSet": {"members": current_user["email"]}}
+    )
+    return {"message": "Joined club successfully"}
+
+
+# ========== FORUM ROUTES ==========
+
+@api_router.get("/forum/posts")
+async def get_forum_posts(category: Optional[str] = None):
+    query = {"category": category} if category else {}
+    posts = await db.forum_posts.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return posts
+
+@api_router.get("/forum/posts/{post_id}")
+async def get_forum_post(post_id: str):
+    post = await db.forum_posts.find_one({"_id": post_id}, {"_id": 0})
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
+    # Get replies
+    replies = await db.forum_replies.find({"post_id": post_id}, {"_id": 0}).sort("created_at", 1).to_list(1000)
+    post["replies"] = replies
+    
+    return post
+
+@api_router.post("/forum/posts")
+async def create_forum_post(post: ForumPostCreate, current_user: dict = Depends(get_current_user)):
+    post_dict = post.model_dump()
+    post_dict["author"] = current_user["username"]
+    post_dict["author_email"] = current_user["email"]
+    post_dict["replies_count"] = 0
+    post_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.forum_posts.insert_one(post_dict)
+    post_dict["_id"] = str(result.inserted_id)
+    
+    return post_dict
+
+@api_router.post("/forum/replies")
+async def create_forum_reply(reply: ForumReplyCreate, current_user: dict = Depends(get_current_user)):
+    reply_dict = reply.model_dump()
+    reply_dict["author"] = current_user["username"]
+    reply_dict["author_email"] = current_user["email"]
+    reply_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.forum_replies.insert_one(reply_dict)
+    
+    # Increment reply count on post
+    await db.forum_posts.update_one(
+        {"_id": reply.post_id},
+        {"$inc": {"replies_count": 1}}
+    )
+    
+    reply_dict["_id"] = str(result.inserted_id)
+    return reply_dict
+
+
+# ========== CHALLENGES ROUTES ==========
+
+@api_router.get("/challenges")
+async def get_challenges():
+    challenges = await db.challenges.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return challenges
+
+@api_router.post("/challenges")
+async def create_challenge(challenge: ChallengeCreate, current_user: dict = Depends(get_current_user)):
+    challenge_dict = challenge.model_dump()
+    challenge_dict["submissions"] = []
+    challenge_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.challenges.insert_one(challenge_dict)
+    challenge_dict["_id"] = str(result.inserted_id)
+    
+    return challenge_dict
+
+
+# ========== USER PROFILE ROUTES ==========
+
+@api_router.get("/profile")
+async def get_profile(current_user: dict = Depends(get_current_user)):
+    user = await db.users.find_one({"email": current_user["email"]}, {"_id": 0, "password": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+@api_router.put("/profile")
+async def update_profile(bio: Optional[str] = None, avatar_url: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+    update_data = {}
+    if bio is not None:
+        update_data["bio"] = bio
+    if avatar_url is not None:
+        update_data["avatar_url"] = avatar_url
+    
+    await db.users.update_one(
+        {"email": current_user["email"]},
+        {"$set": update_data}
+    )
+    
+    return {"message": "Profile updated successfully"}
 
 
 # ========== BASIC ROUTES ==========

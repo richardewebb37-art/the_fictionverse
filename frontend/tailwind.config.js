@@ -46,13 +46,15 @@ module.exports = {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-  			chart: {
-  				'1': 'hsl(var(--chart-1))',
-  				'2': 'hsl(var(--chart-2))',
-  				'3': 'hsl(var(--chart-3))',
-  				'4': 'hsl(var(--chart-4))',
-  				'5': 'hsl(var(--chart-5))'
-  			}
+			'neon-cyan': 'hsl(var(--neon-cyan))',
+			'neon-blue': 'hsl(var(--neon-blue))',
+			'electric-blue': 'hsl(var(--electric-blue))',
+			'deep-navy': 'hsl(var(--deep-navy))',
+		},
+		fontFamily: {
+			'space': ['Space Grotesk', 'sans-serif'],
+			'ibm': ['IBM Plex Sans', 'monospace'],
+		},
   		},
   		keyframes: {
   			'accordion-down': {

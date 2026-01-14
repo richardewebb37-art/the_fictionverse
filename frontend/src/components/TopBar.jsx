@@ -43,17 +43,16 @@ export const TopBar = ({ onAuthOpen }) => {
             onClick={() => scrollToSection('hero')}
             className="flex items-center gap-3 group"
           >
-            <div className="w-8 h-8 flex items-center justify-center text-neon-cyan">
-              <svg width="100%" height="100%" viewBox="0 0 33 33" preserveAspectRatio="xMidYMid meet">
-                <path 
-                  d="M28,0H5C2.24,0,0,2.24,0,5v23c0,2.76,2.24,5,5,5h23c2.76,0,5-2.24,5-5V5c0-2.76-2.24-5-5-5ZM29,17c-6.63,0-12,5.37-12,12h-1c0-6.63-5.37-12-12-12v-1c6.63,0,12-5.37,12-12h1c0,6.63,5.37,12,12,12v1Z" 
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-            <span className="text-lg font-semibold text-foreground group-hover:text-neon-cyan transition-colors">
-              The Fictionverse
-            </span>
+            <img 
+              src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/37hnsbc4_dec9a994ec3641b2b4c1d6ca851e3dc2.png"
+              alt="The Fictionverse Icon"
+              className="w-8 h-8 object-contain group-hover:scale-110 transition-transform"
+            />
+            <img 
+              src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/mpsnr4h5_f7008c300cfa4c46b66a7797a6a674de.png"
+              alt="The Fictionverse"
+              className="h-8 object-contain group-hover:opacity-80 transition-opacity hidden sm:block"
+            />
           </button>
 
           {/* Avatar Menu */}

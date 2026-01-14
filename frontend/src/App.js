@@ -28,16 +28,13 @@ const HomePage = ({ onAuthOpen }) => (
 
 function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
-  const [hasSeenSplash, setHasSeenSplash] = useState(false);
-
-  // Check if user has seen splash before
-  useState(() => {
+  const [showSplash, setShowSplash] = useState(() => {
     const seen = localStorage.getItem('fv_splash_seen');
-    if (seen) {
-      setShowSplash(false);
-      setHasSeenSplash(true);
-    }
+    return !seen;
+  });
+  const [hasSeenSplash, setHasSeenSplash] = useState(() => {
+    const seen = localStorage.getItem('fv_splash_seen');
+    return !!seen;
   });
 
   const handleSplashComplete = () => {

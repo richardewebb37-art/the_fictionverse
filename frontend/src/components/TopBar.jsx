@@ -46,7 +46,7 @@ export const TopBar = ({ onAuthOpen }) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 bg-background/5 backdrop-blur-sm border-b border-border/10">
+    <div className="fixed top-0 left-0 w-full z-50 bg-background/20 backdrop-blur-md border-b border-border/30">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo on Left */}

@@ -92,8 +92,8 @@ export const UniversesSection = () => {
               <TabsContent value="original" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {universes.original.length > 0 ? (
-                    universes.original.map((universe) => (
-                      <UniverseCard key={universe._id} universe={universe} />
+                    universes.original.map((universe, index) => (
+                      <UniverseCard key={`original-${index}`} universe={universe} />
                     ))
                   ) : (
                     <div className="col-span-full text-center py-12 text-muted-foreground">
@@ -106,8 +106,8 @@ export const UniversesSection = () => {
               <TabsContent value="inspired" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {universes.inspired.length > 0 ? (
-                    universes.inspired.map((universe) => (
-                      <UniverseCard key={universe._id} universe={universe} />
+                    universes.inspired.map((universe, index) => (
+                      <UniverseCard key={`inspired-${index}`} universe={universe} />
                     ))
                   ) : (
                     <div className="col-span-full text-center py-12 text-muted-foreground">

@@ -55,7 +55,6 @@ module.exports = {
 			'space': ['Space Grotesk', 'sans-serif'],
 			'ibm': ['IBM Plex Sans', 'monospace'],
 		},
-  		},
   		keyframes: {
   			'accordion-down': {
   				from: {

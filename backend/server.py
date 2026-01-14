@@ -42,7 +42,9 @@ class User(BaseModel):
     model_config = ConfigDict(extra="ignore")
     username: str
     email: EmailStr
-    role: str = "user"
+    role: str = "traveler"  # traveler, architect, commander
+    bio: Optional[str] = None
+    avatar_url: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class UserCreate(BaseModel):
@@ -59,14 +61,133 @@ class Universe(BaseModel):
     title: str
     description: str
     type: str  # "Original" or "Inspired"
+    genre: str  # "Sci-Fi", "Noir", "Fantasy", "Cyberpunk", "Mystery"
     author: str
+    author_email: str
+    cover_image: Optional[str] = None
+    status: str = "active"  # active, draft, archived
+    is_premium: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class UniverseCreate(BaseModel):
     title: str
     description: str
     type: str
+    genre: str
+    cover_image: Optional[str] = None
+    is_premium: bool = False
+
+class Story(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    universe_id: str
+    title: str
+    content: str
+    chapter_number: int
     author: str
+    author_email: str
+    status: str = "published"  # draft, published, archived
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class StoryCreate(BaseModel):
+    universe_id: str
+    title: str
+    content: str
+    chapter_number: int
+    status: str = "published"
+
+class Character(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    universe_id: str
+    name: str
+    description: str
+    role: str  # protagonist, antagonist, supporting
+    image_url: Optional[str] = None
+    traits: List[str] = []
+    backstory: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CharacterCreate(BaseModel):
+    universe_id: str
+    name: str
+    description: str
+    role: str
+    image_url: Optional[str] = None
+    traits: List[str] = []
+    backstory: Optional[str] = None
+
+class LoreEntry(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    universe_id: str
+    title: str
+    content: str
+    category: str  # history, technology, culture, geography
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class LoreEntryCreate(BaseModel):
+    universe_id: str
+    title: str
+    content: str
+    category: str
+
+class Club(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    name: str
+    description: str
+    type: str  # reading, writing, discussion
+    creator: str
+    members: List[str] = []
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ClubCreate(BaseModel):
+    name: str
+    description: str
+    type: str
+
+class ForumPost(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    title: str
+    content: str
+    author: str
+    author_email: str
+    category: str  # theory, critique, general, announcement
+    tags: List[str] = []
+    replies_count: int = 0
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ForumPostCreate(BaseModel):
+    title: str
+    content: str
+    category: str
+    tags: List[str] = []
+
+class ForumReply(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    post_id: str
+    content: str
+    author: str
+    author_email: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ForumReplyCreate(BaseModel):
+    post_id: str
+    content: str
+
+class Challenge(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    title: str
+    description: str
+    prompt: str
+    type: str  # writing, worldbuilding, character
+    deadline: Optional[datetime] = None
+    submissions: List[str] = []
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ChallengeCreate(BaseModel):
+    title: str
+    description: str
+    prompt: str
+    type: str
+    deadline: Optional[datetime] = None
 
 
 # ========== HELPER FUNCTIONS ==========
@@ -83,6 +204,20 @@ def create_access_token(data: dict):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+def get_current_user(token: str = Cookie(None, alias="fv_token")):
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("email")
+        if not email:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        return {"email": email, "username": payload.get("username")}
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 
 # ========== AUTH ROUTES ==========

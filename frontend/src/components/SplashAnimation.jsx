@@ -1,100 +1,237 @@
-import { useEffect, useState } from 'react';
-import './SplashAnimation.css';
+import { useEffect, useRef } from 'react';
 
 export const SplashAnimation = ({ onComplete }) => {
-  const [stage, setStage] = useState('compress'); // compress, morph, scroll, disclaimer, complete
+  const canvasRef = useRef(null);
+  const animationFrameRef = useRef(null);
+  const startTimeRef = useRef(Date.now());
+  const particlesRef = useRef([]);
 
   useEffect(() => {
-    const sequence = async () => {
-      // Stage 1: Logo compressed (gravity effect) - 0.8s
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Stage 2: Pause
-      await new Promise(resolve => setTimeout(resolve, 400));
-      
-      // Stage 3: Morph to full wordmark - 1s
-      setStage('morph');
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Stage 4: Scroll up to reveal disclaimer - 1s
-      setStage('scroll');
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Stage 5: Show disclaimer - 5s
-      setStage('disclaimer');
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      
-      // Stage 6: Fade out and complete
-      setStage('complete');
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      onComplete();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    // TIMELINE CONFIG (In Seconds)
+    const TIMELINE = {
+      START_DELAY: 2,       // Screen sits black for moment
+      LOGO_FORM: 4,         // Gravity pulls logo together
+      LOGO_HOLD: 10,        // Logo stays
+      TEXT_FORM: 15,        // "The Fictionverse" appears underneath
+      TEXT_HOLD: 25,        // Both hold together
+      MORPH_START: 28,      // Slow morph begins
+      DISCLAIMER_FORM: 32,  // Disclaimer readable
+      DISCLAIMER_HOLD: 38,  // Disclaimer stays
+      EXPLODE: 39           // Zoom out to interface
     };
 
-    sequence();
+    // Resize handler
+    const resize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resize);
+    resize();
+
+    // PARTICLE CLASS
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.z = Math.random() * 2 + 1;
+        
+        this.originX = this.x;
+        this.originY = this.y;
+        
+        this.targetX = null;
+        this.targetY = null;
+        
+        this.vx = 0;
+        this.vy = 0;
+        
+        this.friction = 0.94;
+        this.ease = 0.04;
+        
+        this.color = Math.random() > 0.5 ? '#00F0FF' : '#2E93fA';
+        this.size = 1.5;
+        this.alpha = 1;
+      }
+
+      update(targetState) {
+        if (this.targetX !== null && this.targetY !== null) {
+          let dx = this.targetX - this.x;
+          let dy = this.targetY - this.y;
+          
+          this.vx += dx * this.ease;
+          this.vy += dy * this.ease;
+        } else {
+          this.vx += (Math.random() - 0.5) * 0.05;
+          this.vy += (Math.random() - 0.5) * 0.05;
+        }
+
+        if (targetState === 'EXPLODE') {
+          this.ease = 0.1;
+          let dx = this.x - (width/2);
+          let dy = this.y - (height/2);
+          if(dx === 0) dx = 1;
+          this.vx += dx * 0.05;
+          this.vy += dy * 0.05;
+          this.alpha -= 0.02;
+        }
+
+        this.vx *= this.friction;
+        this.vy *= this.friction;
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+
+      draw() {
+        if (this.alpha <= 0) return;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.alpha;
+        ctx.fill();
+      }
+    }
+
+    // TEXT TO PARTICLE CONVERTER
+    const getTargetsFromText = (text, fontSize, yOffset) => {
+      const tCanvas = document.createElement('canvas');
+      const tCtx = tCanvas.getContext('2d');
+      tCanvas.width = width;
+      tCanvas.height = height;
+      
+      tCtx.fillStyle = 'white';
+      tCtx.font = `bold ${fontSize}px "Space Grotesk", sans-serif`;
+      tCtx.textAlign = 'center';
+      tCtx.textBaseline = 'middle';
+      tCtx.fillText(text, width / 2, (height / 2) + yOffset);
+
+      const imageData = tCtx.getImageData(0, 0, width, height).data;
+      const targets = [];
+      
+      for (let y = 0; y < height; y += 4) {
+        for (let x = 0; x < width; x += 4) {
+          const index = (y * width + x) * 4;
+          if (imageData[index + 3] > 128) {
+            targets.push({x, y});
+          }
+        }
+      }
+      return targets;
+    };
+
+    // Initialize Targets
+    const logoTargets = getTargetsFromText('FV', 150, -50);
+    const titleTargets = getTargetsFromText('THE FICTIONVERSE', 40, 60);
+    const disclaimerTargets = getTargetsFromText('ORIGINAL & INSPIRED PROTOCOLS', 20, 0);
+
+    const maxPoints = Math.max(logoTargets.length + titleTargets.length, disclaimerTargets.length);
+    const particles = [];
+    for(let i = 0; i < maxPoints + 500; i++) {
+      particles.push(new Particle());
+    }
+    particlesRef.current = particles;
+
+    let currentState = 'START';
+
+    // ANIMATION LOOP
+    const loop = () => {
+      const elapsed = (Date.now() - startTimeRef.current) / 1000;
+      
+      // STATE MACHINE
+      if (elapsed < TIMELINE.START_DELAY) {
+        currentState = 'WAIT';
+      } 
+      else if (elapsed < TIMELINE.TEXT_FORM) {
+        currentState = 'FORM_LOGO';
+      }
+      else if (elapsed < TIMELINE.MORPH_START) {
+        currentState = 'FORM_FULL';
+      }
+      else if (elapsed < TIMELINE.EXPLODE) {
+        currentState = 'MORPH_DISCLAIMER';
+      }
+      else {
+        currentState = 'EXPLODE';
+      }
+
+      // Assign Targets based on State
+      particles.forEach((p, i) => {
+        p.targetX = null;
+        p.targetY = null;
+
+        if (currentState === 'FORM_LOGO') {
+          if (i < logoTargets.length) {
+            p.targetX = logoTargets[i].x;
+            p.targetY = logoTargets[i].y;
+          }
+        }
+        else if (currentState === 'FORM_FULL') {
+          if (i < logoTargets.length) {
+            p.targetX = logoTargets[i].x;
+            p.targetY = logoTargets[i].y;
+          } 
+          else if (i < logoTargets.length + titleTargets.length) {
+            let tIdx = i - logoTargets.length;
+            p.targetX = titleTargets[tIdx].x;
+            p.targetY = titleTargets[tIdx].y;
+          }
+        }
+        else if (currentState === 'MORPH_DISCLAIMER') {
+          if (i < disclaimerTargets.length) {
+            p.targetX = disclaimerTargets[i].x;
+            p.targetY = disclaimerTargets[i].y;
+            p.ease = 0.02;
+          }
+        }
+        
+        p.update(currentState);
+      });
+
+      // Drawing
+      ctx.fillStyle = '#050505';
+      ctx.fillRect(0, 0, width, height);
+      
+      particles.forEach(p => p.draw());
+
+      // END SEQUENCE CHECK
+      if (currentState === 'EXPLODE' && elapsed > TIMELINE.EXPLODE + 2) {
+        cancelAnimationFrame(animationFrameRef.current);
+        onComplete();
+      } else {
+        animationFrameRef.current = requestAnimationFrame(loop);
+      }
+    };
+
+    // Start animation
+    loop();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', resize);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, [onComplete]);
 
-  if (stage === 'complete') return null;
-
   return (
-    <div className="splash-container">
-      <div className="splash-content">
-        {/* Logo Animation Area */}
-        <div className={`logo-animation stage-${stage}`}>
-          {stage === 'compress' && (
-            <div className="logo-compress">
-              <img 
-                src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/37hnsbc4_dec9a994ec3641b2b4c1d6ca851e3dc2.png"
-                alt="FV"
-                className="fv-icon-compress"
-              />
-            </div>
-          )}
-          
-          {(stage === 'morph' || stage === 'scroll' || stage === 'disclaimer') && (
-            <div className={`logo-full ${stage === 'scroll' || stage === 'disclaimer' ? 'scroll-up' : ''}`}>
-              <img 
-                src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/37hnsbc4_dec9a994ec3641b2b4c1d6ca851e3dc2.png"
-                alt="FV"
-                className="fv-icon"
-              />
-              <img 
-                src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/mpsnr4h5_f7008c300cfa4c46b66a7797a6a674de.png"
-                alt="The Fictionverse"
-                className="fv-text"
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Disclaimer */}
-        {(stage === 'disclaimer') && (
-          <div className="disclaimer-container fade-in">
-            <div className="disclaimer-box">
-              <h2 className="disclaimer-title">SYSTEM ACCESS PROTOCOL</h2>
-              <div className="disclaimer-content">
-                <p className="disclaimer-text">
-                  You are accessing The Fictionverse—a curated nexus of fictional realities.
-                </p>
-                <p className="disclaimer-text">
-                  All content within represents <span className="highlight">non-canonical simulations</span> and 
-                  original protocols created by independent architects.
-                </p>
-                <p className="disclaimer-text">
-                  By proceeding, you acknowledge these works are transformative explorations 
-                  of established universes or entirely new constructs.
-                </p>
-              </div>
-              <div className="disclaimer-footer">
-                <div className="progress-bar">
-                  <div className="progress-fill" />
-                </div>
-                <p className="disclaimer-small">Initializing access...</p>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: '#050505',
+        zIndex: 99999
+      }}
+    />
   );
 };
+

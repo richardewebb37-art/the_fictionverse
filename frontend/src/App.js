@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { ParticleCanvas } from '@/components/ParticleCanvas';
 import { GatekeeperModal } from '@/components/GatekeeperModal';
@@ -12,6 +12,19 @@ import { UniversesSection } from '@/components/UniversesSection';
 import { AboutSection } from '@/components/AboutSection';
 import { SettingsSection } from '@/components/SettingsSection';
 import { Footer } from '@/components/Footer';
+import ExplorePage from '@/pages/ExplorePage';
+import StoryReader from '@/pages/StoryReader';
+
+const HomePage = ({ onAuthOpen }) => (
+  <main className="relative z-10 pb-24">
+    <HeroSection onAuthOpen={onAuthOpen} />
+    <FeaturesSection />
+    <UniversesSection />
+    <AboutSection />
+    <SettingsSection />
+    <Footer />
+  </main>
+);
 
 function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -37,17 +50,12 @@ function App() {
           onClose={() => setIsAuthOpen(false)} 
         />
         
-        {/* Main Content */}
-        <main className="relative z-10 pb-24">
-          <HeroSection onAuthOpen={() => setIsAuthOpen(true)} />
-          <FeaturesSection />
-          <UniversesSection />
-          <AboutSection />
-          <SettingsSection />
-        </main>
-        
-        {/* Footer */}
-        <Footer />
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<HomePage onAuthOpen={() => setIsAuthOpen(true)} />} />
+          <Route path="/explore" element={<ExplorePage />} />
+          <Route path="/read/:universeId/:chapterNum" element={<StoryReader />} />
+        </Routes>
         
         {/* Bottom Navigation (Mobile App Style) */}
         <BottomNavigation />

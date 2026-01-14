@@ -1,30 +1,48 @@
 import { Home, Lightbulb, Info, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const BottomNavigation = () => {
+  const navigate = useNavigate();
+  
   const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    // Check if we're on homepage
+    if (window.location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
+  const handleExplore = () => {
+    navigate('/explore');
+  };
+
   const navItems = [
-    { icon: Home, label: 'Explore', section: 'universes' },
-    { icon: Lightbulb, label: 'Features', section: 'features' },
-    { icon: Info, label: 'About', section: 'about' },
-    { icon: Settings, label: 'Settings', section: 'settings' },
+    { icon: Home, label: 'Explore', action: handleExplore },
+    { icon: Lightbulb, label: 'Features', action: () => scrollToSection('features') },
+    { icon: Info, label: 'About', action: () => scrollToSection('about') },
+    { icon: Settings, label: 'Settings', action: () => scrollToSection('settings') },
   ];
 
   return (
     <nav className="bottom-nav">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-around max-w-2xl mx-auto">
-          {navItems.map((item) => {
+          {navItems.map((item, index) => {
             const Icon = item.icon;
             return (
               <button
-                key={item.section}
-                onClick={() => scrollToSection(item.section)}
+                key={index}
+                onClick={item.action}
                 className="flex flex-col items-center gap-1 px-4 py-2 group hover:scale-110 transition-transform"
               >
                 <Icon 

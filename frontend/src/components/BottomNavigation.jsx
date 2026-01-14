@@ -1,4 +1,4 @@
-import { Home, Lightbulb, Info, Settings } from 'lucide-react';
+import { BookOpen, Lightbulb, Info, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const BottomNavigation = () => {
@@ -27,14 +27,14 @@ export const BottomNavigation = () => {
   };
 
   const navItems = [
-    { icon: Home, label: 'Explore', action: handleExplore },
+    { icon: BookOpen, label: 'Explore', action: handleExplore },
     { icon: Lightbulb, label: 'Features', action: () => scrollToSection('features') },
     { icon: Info, label: 'About', action: () => scrollToSection('about') },
     { icon: Settings, label: 'Settings', action: () => scrollToSection('settings') },
   ];
 
   return (
-    <nav className="bottom-nav">
+    <nav className="fixed bottom-0 left-0 right-0 z-100 bg-background/5 backdrop-blur-sm border-t border-border/10 py-2">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-around max-w-2xl mx-auto">
           {navItems.map((item, index) => {

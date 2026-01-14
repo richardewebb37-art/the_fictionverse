@@ -165,11 +165,11 @@ code {
         left: 0;
         right: 0;
         z-index: 100;
-        background: hsl(var(--background) / 0.9);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border-top: 1px solid hsl(var(--border) / 0.5);
-        padding: 0.75rem 0;
+        background: hsl(var(--background) / 0.05);
+        backdrop-filter: blur(8px) saturate(180%);
+        -webkit-backdrop-filter: blur(8px) saturate(180%);
+        border-top: 1px solid hsl(var(--border) / 0.1);
+        padding: 0.5rem 0;
     }
     
     /* Avatar dropdown menu */

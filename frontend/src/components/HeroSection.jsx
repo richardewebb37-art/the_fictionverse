@@ -2,8 +2,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export const HeroSection = ({ onAuthOpen }) => {
-  const scrollToFeatures = () => {
-    const element = document.getElementById('features');
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -12,7 +12,7 @@ export const HeroSection = ({ onAuthOpen }) => {
   return (
     <section 
       id="hero" 
-      className="relative min-h-screen flex items-center justify-center pt-16 pb-20 px-4"
+      className="relative min-h-screen flex items-center justify-center pt-24 pb-32 px-4"
     >
       <div className="container mx-auto max-w-6xl fade-in">
         <div className="text-center space-y-8">
@@ -47,7 +47,7 @@ export const HeroSection = ({ onAuthOpen }) => {
             <Button
               size="lg"
               variant="outline"
-              onClick={scrollToFeatures}
+              onClick={() => scrollToSection('universes')}
               className="border-foreground text-foreground hover:border-neon-cyan hover:text-neon-cyan text-lg px-8 py-6"
             >
               Explore

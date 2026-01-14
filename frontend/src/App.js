@@ -3,11 +3,14 @@ import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { ParticleCanvas } from '@/components/ParticleCanvas';
 import { GatekeeperModal } from '@/components/GatekeeperModal';
-import { Navigation } from '@/components/Navigation';
+import { TopBar } from '@/components/TopBar';
+import { BottomNavigation } from '@/components/BottomNavigation';
 import { AuthModal } from '@/components/AuthModal';
 import { HeroSection } from '@/components/HeroSection';
 import { FeaturesSection } from '@/components/FeaturesSection';
 import { UniversesSection } from '@/components/UniversesSection';
+import { AboutSection } from '@/components/AboutSection';
+import { SettingsSection } from '@/components/SettingsSection';
 import { Footer } from '@/components/Footer';
 
 function App() {
@@ -15,15 +18,18 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="App relative min-h-screen bg-background text-foreground font-space">
-        {/* Particle Background */}
+      <div className="App relative min-h-screen text-foreground font-space">
+        {/* Static Background Image */}
+        <div className="app-background" />
+        
+        {/* Particle Canvas (above background) */}
         <ParticleCanvas />
         
         {/* 15-Second Gatekeeper */}
         <GatekeeperModal />
         
-        {/* Navigation */}
-        <Navigation onAuthOpen={() => setIsAuthOpen(true)} />
+        {/* Top Bar (Logo + Avatar) */}
+        <TopBar onAuthOpen={() => setIsAuthOpen(true)} />
         
         {/* Auth Modal */}
         <AuthModal 
@@ -32,14 +38,19 @@ function App() {
         />
         
         {/* Main Content */}
-        <main className="relative z-10">
+        <main className="relative z-10 pb-24">
           <HeroSection onAuthOpen={() => setIsAuthOpen(true)} />
           <FeaturesSection />
           <UniversesSection />
+          <AboutSection />
+          <SettingsSection />
         </main>
         
         {/* Footer */}
         <Footer />
+        
+        {/* Bottom Navigation (Mobile App Style) */}
+        <BottomNavigation />
         
         {/* Toast Notifications */}
         <Toaster 

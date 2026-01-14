@@ -52,7 +52,7 @@ export const UniversesSection = () => {
   );
 
   return (
-    <section id="universes" className="relative py-20 px-4 bg-card/30">
+    <section id="universes" className="relative py-20 px-4 glass-section">
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16 space-y-4 fade-in">

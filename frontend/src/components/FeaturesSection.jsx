@@ -41,7 +41,7 @@ const features = [
 
 export const FeaturesSection = () => {
   return (
-    <section id="features" className="relative py-20 px-4">
+    <section id="features" className="relative py-20 px-4 glass-section">
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16 space-y-4 fade-in">

@@ -234,7 +234,9 @@ async def signup(user_data: UserCreate, response: Response):
         "username": user_data.username,
         "email": user_data.email,
         "password": hash_password(user_data.password),
-        "role": "user",
+        "role": "traveler",
+        "bio": None,
+        "avatar_url": None,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
@@ -257,7 +259,7 @@ async def signup(user_data: UserCreate, response: Response):
         "user": {
             "username": user_data.username,
             "email": user_data.email,
-            "role": "user"
+            "role": "traveler"
         }
     }
 

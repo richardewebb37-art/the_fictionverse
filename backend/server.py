@@ -575,44 +575,201 @@ async def seed_data():
                 "title": "Chronicles of Aether",
                 "description": "A mystical realm where magic and technology intertwine. Follow heroes as they navigate floating cities and ancient mysteries.",
                 "type": "Original",
+                "genre": "Fantasy",
                 "author": "Nova Starweaver",
+                "author_email": "nova@fictionverse.io",
+                "status": "active",
+                "is_premium": False,
                 "created_at": datetime.now(timezone.utc).isoformat()
             },
             {
                 "title": "Neon Shadows",
                 "description": "In a cyberpunk dystopia, hackers fight against corporate overlords. High-tech thrills meet underground resistance.",
                 "type": "Original",
+                "genre": "Cyberpunk",
                 "author": "Cipher Echo",
+                "author_email": "cipher@fictionverse.io",
+                "status": "active",
+                "is_premium": False,
                 "created_at": datetime.now(timezone.utc).isoformat()
             },
             {
                 "title": "The Last Garden",
                 "description": "After Earth's collapse, survivors discover a hidden sanctuary. Hope blooms in the most unexpected places.",
                 "type": "Original",
+                "genre": "Sci-Fi",
                 "author": "Eden Bloom",
+                "author_email": "eden@fictionverse.io",
+                "status": "active",
+                "is_premium": False,
                 "created_at": datetime.now(timezone.utc).isoformat()
             },
             {
                 "title": "Wizards United",
                 "description": "Expanding on the magical world we love, new students discover hidden chambers and forgotten spells at Hogwarts.",
                 "type": "Inspired",
+                "genre": "Fantasy",
                 "author": "Mystic Quill",
+                "author_email": "mystic@fictionverse.io",
+                "status": "active",
+                "is_premium": False,
                 "created_at": datetime.now(timezone.utc).isoformat()
             },
             {
                 "title": "Middle Earth: The Fourth Age",
                 "description": "Long after the Ring was destroyed, new threats emerge. Descendants of heroes must rise once more.",
                 "type": "Inspired",
+                "genre": "Fantasy",
                 "author": "Ranger's Tale",
+                "author_email": "ranger@fictionverse.io",
+                "status": "active",
+                "is_premium": False,
                 "created_at": datetime.now(timezone.utc).isoformat()
             },
             {
                 "title": "Starfleet Academy Chronicles",
                 "description": "Before the Enterprise, cadets learn what it means to explore strange new worlds and seek out new life.",
                 "type": "Inspired",
+                "genre": "Sci-Fi",
                 "author": "Commander Stellar",
+                "author_email": "stellar@fictionverse.io",
+                "status": "active",
+                "is_premium": False,
                 "created_at": datetime.now(timezone.utc).isoformat()
             }
         ]
         await db.universes.insert_many(sample_universes)
         logger.info("Sample universes seeded successfully")
+        
+        # Seed sample stories for Neon Shadows
+        sample_stories = [
+            {
+                "universe_id": "Neon Shadows",
+                "title": "Chapter 1: The Network Breach",
+                "content": "The city never sleeps, and neither do its digital ghosts. Rain cascaded down the neon-lit streets of Neo-Tokyo as Kira pulled her hood tighter, her neural implant buzzing with encrypted data streams. Tonight's job was supposed to be simple: breach the Omnicorp mainframe, extract the files, disappear into the digital fog. But nothing in the shadows is ever simple.\n\nHer fingers danced across the holographic interface, code flowing like liquid light. The corporation's firewall was a beast—adaptive, learning, almost alive. Almost. Kira had faced worse. In the underworld of cyber-warfare, she was known as Ghost Protocol, a whisper in the machine, impossible to trace.\n\n'You're in,' came the voice through her earpiece. Jax, her partner, monitoring from a safe house across the city. 'But there's movement. Corp security is mobilizing.'\n\n'Let them come,' Kira muttered, her eyes reflecting the cascading data. She had thirty seconds before the trace completed. Thirty seconds to change everything.",
+                "chapter_number": 1,
+                "author": "Cipher Echo",
+                "author_email": "cipher@fictionverse.io",
+                "status": "published",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "universe_id": "Neon Shadows",
+                "title": "Chapter 2: Corporate Shadows",
+                "content": "The extraction went sideways faster than Kira anticipated. Omnicorp wasn't just another megacorp—they had something new, something dangerous. As the data flooded her neural interface, fragmented images flashed: black sites, human experiments, a project codenamed 'Eclipse.'\n\n'Ghost, you need to abort!' Jax's voice cracked with static. 'They're using hunter-drones. Military grade!'\n\nKira's heart raced as she severed the connection, yanking the data spike from the terminal. The warehouse erupted in crimson warning lights. Through the grimy windows, she saw them: sleek, spider-like drones descending from the perpetual smog, their optical sensors scanning for heat signatures.\n\nShe bolted for the fire escape, her augmented legs propelling her up the rusted ladder. Behind her, plasma rounds scorched the metal, melting through decades of corrosion. The city sprawled beneath her, a labyrinth of light and shadow. Somewhere in that maze, answers waited. And so did the people who wanted her dead.",
+                "chapter_number": 2,
+                "author": "Cipher Echo",
+                "author_email": "cipher@fictionverse.io",
+                "status": "published",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+        await db.stories.insert_many(sample_stories)
+        logger.info("Sample stories seeded successfully")
+        
+        # Seed sample characters
+        sample_characters = [
+            {
+                "universe_id": "Neon Shadows",
+                "name": "Kira 'Ghost Protocol' Chen",
+                "description": "Elite hacker and data thief operating in Neo-Tokyo's underbelly",
+                "role": "protagonist",
+                "traits": ["Brilliant", "Resourceful", "Haunted by past", "Loyal"],
+                "backstory": "Once a corporate security analyst, Kira witnessed Omnicorp's dark experiments firsthand. She faked her death and emerged as Ghost Protocol, dedicated to exposing corporate corruption one breach at a time.",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "universe_id": "Neon Shadows",
+                "name": "Jax Rivera",
+                "description": "Former military tech specialist and Kira's trusted partner",
+                "role": "supporting",
+                "traits": ["Tactical", "Protective", "Tech-savvy", "Cynical"],
+                "backstory": "Discharged after questioning orders, Jax found purpose in the underground resistance. His military connections provide invaluable intel.",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+        await db.characters.insert_many(sample_characters)
+        logger.info("Sample characters seeded successfully")
+        
+        # Seed sample lore
+        sample_lore = [
+            {
+                "universe_id": "Neon Shadows",
+                "title": "Neo-Tokyo Overview",
+                "content": "Neo-Tokyo rose from the ashes of the old world, a vertical city of impossible scale. Three hundred million souls packed into megastructures that pierce the perpetual smog. The upper levels belong to the elite, bathed in artificial sunlight. The lower levels—the Undercity—exist in eternal twilight, where the law is whatever the corps say it is.",
+                "category": "geography",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "universe_id": "Neon Shadows",
+                "title": "Neural Implants",
+                "content": "Every citizen above Level 50 has neural implants—direct brain-computer interfaces that allow seamless interaction with the digital world. But the corps control the firmware. Every thought, every transaction, monitored. In the Undercity, hackers trade in black-market mods that promise freedom. At a price.",
+                "category": "technology",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+        await db.lore.insert_many(sample_lore)
+        logger.info("Sample lore seeded successfully")
+        
+        # Seed sample clubs
+        sample_clubs = [
+            {
+                "name": "Cyberpunk Writers Circle",
+                "description": "A community for architects crafting dystopian futures and neon-soaked narratives",
+                "type": "writing",
+                "creator": "System",
+                "members": [],
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "name": "Fantasy Realm Readers",
+                "description": "Travelers who explore magical universes and epic quests together",
+                "type": "reading",
+                "creator": "System",
+                "members": [],
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+        await db.clubs.insert_many(sample_clubs)
+        logger.info("Sample clubs seeded successfully")
+        
+        # Seed sample forum posts
+        sample_forum_posts = [
+            {
+                "title": "Theory: Is Project Eclipse connected to the old world governments?",
+                "content": "I've been reading through the Neon Shadows chapters and noticed some interesting details about Project Eclipse. The timing of the experiments coincides with the fall of the UN. Anyone else notice this pattern?",
+                "author": "DataHunter",
+                "author_email": "hunter@fictionverse.io",
+                "category": "theory",
+                "tags": ["Neon Shadows", "Eclipse", "Theory"],
+                "replies_count": 0,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "title": "Writing Critique: How to write better dialogue in cyberpunk settings?",
+                "content": "Fellow architects, I'm working on my own cyber-noir universe and struggling with authentic-feeling dialogue. It either sounds too modern or too forced. Any tips from experienced writers here?",
+                "author": "NoviceArchitect",
+                "author_email": "novice@fictionverse.io",
+                "category": "critique",
+                "tags": ["Writing Tips", "Cyberpunk", "Dialogue"],
+                "replies_count": 0,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+        await db.forum_posts.insert_many(sample_forum_posts)
+        logger.info("Sample forum posts seeded successfully")
+        
+        # Seed sample challenge
+        sample_challenges = [
+            {
+                "title": "The 100-Word Universe Challenge",
+                "description": "Create an entire universe in exactly 100 words. Show us a world worth exploring.",
+                "prompt": "In 100 words, describe a unique fictional universe. Include: setting, one character, one conflict, and the rules that make your world distinct. Make every word count.",
+                "type": "worldbuilding",
+                "deadline": None,
+                "submissions": [],
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+        await db.challenges.insert_many(sample_challenges)
+        logger.info("Sample challenges seeded successfully")

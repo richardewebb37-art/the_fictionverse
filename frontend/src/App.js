@@ -58,9 +58,6 @@ function App() {
             {/* Particle Canvas (above background) */}
             <ParticleCanvas />
             
-            {/* 15-Second Gatekeeper - Only after splash */}
-            <GatekeeperModal />
-            
             {/* Top Bar (Logo + Avatar) - Darker */}
             <TopBar onAuthOpen={() => setIsAuthOpen(true)} />
             

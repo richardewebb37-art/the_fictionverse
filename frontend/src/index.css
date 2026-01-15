@@ -82,10 +82,13 @@ code {
     * {
         @apply border-border;
     }
+    html, body {
+        overflow-x: hidden;
+        min-height: 100vh;
+    }
     body {
         @apply bg-background text-foreground;
         background-color: hsl(var(--background));
-        overflow-x: hidden;
     }
     
     html {

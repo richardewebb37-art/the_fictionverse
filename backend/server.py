@@ -669,7 +669,10 @@ async def seed_data():
         ]
         await db.stories.insert_many(sample_stories)
         logger.info("Sample stories seeded successfully")
-        
+    
+    # Seed characters if empty
+    characters_count = await db.characters.count_documents({})
+    if characters_count == 0:
         # Seed sample characters
         sample_characters = [
             {

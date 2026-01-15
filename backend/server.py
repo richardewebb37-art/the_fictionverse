@@ -567,9 +567,9 @@ async def shutdown_db_client():
 # Seed some sample data on startup
 @app.on_event("startup")
 async def seed_data():
-    # Check if universes collection is empty
-    count = await db.universes.count_documents({})
-    if count == 0:
+    # Seed universes if empty
+    universes_count = await db.universes.count_documents({})
+    if universes_count == 0:
         sample_universes = [
             {
                 "title": "Chronicles of Aether",

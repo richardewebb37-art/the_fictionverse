@@ -96,7 +96,7 @@ export const ExplorePage = () => {
           className="text-neon-cyan hover:text-neon-blue"
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/universe/${universe.title}`);
+            navigate(`/universe/${encodeURIComponent(universe.title)}`);
           }}
         >
           Enter Simulation →

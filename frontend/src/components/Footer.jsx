@@ -9,7 +9,7 @@ export const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <img 
-                src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/37hnsbc4_dec9a994ec3641b2b4c1d6ca851e3dc2.png"
+                src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/onoodm24_1000050916.png"
                 alt="The Fictionverse Icon"
                 className="w-8 h-8 object-contain"
               />

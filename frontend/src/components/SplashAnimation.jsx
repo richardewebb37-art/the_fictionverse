@@ -34,7 +34,7 @@ export const SplashAnimation = ({ onComplete }) => {
     <div className="fixed inset-0 z-[99999] bg-[#050505] flex items-center justify-center overflow-hidden">
       {/* FV Logo (fades in, then fades out as text appears) */}
       <img
-        src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/37hnsbc4_dec9a994ec3641b2b4c1d6ca851e3dc2.png"
+        src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/onoodm24_1000050916.png"
         alt="FV Logo"
         className={`absolute w-32 h-32 object-contain transition-all duration-1000 ease-in-out
           ${stage === 'fadeInLogo' ? 'opacity-100 scale-100' : ''}

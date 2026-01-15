@@ -59,7 +59,8 @@ export const ExplorePage = () => {
   const UniverseCard = ({ universe }) => (
     <div 
       className="glass-card p-6 hover:scale-105 transition-all duration-300 group cursor-pointer"
-      onClick={() => navigate(`/universe/${universe.title}`)}
+      onClick={() => navigate(`/universe/${encodeURIComponent(universe.title)}`)}
+      data-testid={`universe-card-${universe.title}`}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">

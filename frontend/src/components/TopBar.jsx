@@ -73,9 +73,7 @@ export const TopBar = ({ onAuthOpen }) => {
                   {user.username?.charAt(0).toUpperCase() || 'U'}
                 </div>
               ) : (
-                <div className="w-8 h-8 rounded-full border-2 border-neon-cyan/50 flex items-center justify-center hover:border-neon-cyan transition-colors">
-                  <User size={18} className="text-neon-cyan" />
-                </div>
+                <User size={22} className="text-neon-cyan hover:text-neon-blue transition-colors" />
               )}
             </button>
 
@@ -122,18 +120,16 @@ export const TopBar = ({ onAuthOpen }) => {
                   About
                 </button>
                 
-                {isLoggedIn && (
-                  <div className="border-t border-border/50 mt-2 pt-2">
-                    <button
-                      onClick={handleLogout}
-                      className="w-full px-4 py-2 text-left text-sm hover:bg-destructive/10 text-destructive flex items-center gap-3"
-                      data-testid="menu-logout"
-                    >
-                      <LogOut size={16} />
-                      Logout
-                    </button>
-                  </div>
-                )}
+                <div className="border-t border-border/50 mt-2 pt-2">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-destructive/10 text-destructive flex items-center gap-3"
+                    data-testid="menu-logout"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </div>
               </div>
             )}
           </div>

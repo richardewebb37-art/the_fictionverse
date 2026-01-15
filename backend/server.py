@@ -719,7 +719,10 @@ async def seed_data():
         ]
         await db.lore.insert_many(sample_lore)
         logger.info("Sample lore seeded successfully")
-        
+    
+    # Seed clubs if empty
+    clubs_count = await db.clubs.count_documents({})
+    if clubs_count == 0:
         # Seed sample clubs
         sample_clubs = [
             {

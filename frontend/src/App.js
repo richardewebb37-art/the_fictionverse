@@ -19,6 +19,7 @@ import UniversePage from '@/pages/UniversePage';
 import CommunityPage from '@/pages/CommunityPage';
 import ChallengesPage from '@/pages/ChallengesPage';
 import ProfilePage from '@/pages/ProfilePage';
+import SettingsPage from '@/pages/SettingsPage';
 
 const HomePage = ({ onAuthOpen }) => (
   <main className="relative z-10 pb-32">

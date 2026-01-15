@@ -12,7 +12,6 @@ import { toast } from 'sonner';
 
 export const SettingsPage = () => {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [settings, setSettings] = useState({
     notifications: true,
     emailUpdates: false,
@@ -22,14 +21,10 @@ export const SettingsPage = () => {
   });
 
   useEffect(() => {
-    const authStatus = localStorage.getItem('fv_auth');
-    if (authStatus) {
-      setIsLoggedIn(true);
-      // Load saved settings
-      const savedSettings = localStorage.getItem('fv_settings');
-      if (savedSettings) {
-        setSettings(JSON.parse(savedSettings));
-      }
+    // Load saved settings
+    const savedSettings = localStorage.getItem('fv_settings');
+    if (savedSettings) {
+      setSettings(JSON.parse(savedSettings));
     }
   }, []);
 

@@ -696,7 +696,10 @@ async def seed_data():
         ]
         await db.characters.insert_many(sample_characters)
         logger.info("Sample characters seeded successfully")
-        
+    
+    # Seed lore if empty
+    lore_count = await db.lore.count_documents({})
+    if lore_count == 0:
         # Seed sample lore
         sample_lore = [
             {

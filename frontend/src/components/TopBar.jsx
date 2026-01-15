@@ -61,80 +61,69 @@ export const TopBar = ({ onAuthOpen }) => {
             />
           </button>
 
-          {/* User Menu Icon on Right (NO ARROW) */}
-          <div className="relative">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-muted/20 transition-all"
-            >
-              {isLoggedIn ? (
+          {/* User Menu Icon on Right - ONLY FOR LOGGED IN USERS */}
+          {isLoggedIn && (
+            <div className="relative">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-muted/20 transition-all"
+              >
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-cyan to-neon-blue flex items-center justify-center text-primary-foreground font-semibold text-sm">
                   {user?.username?.charAt(0).toUpperCase() || 'U'}
                 </div>
-              ) : (
-                <User size={24} className="text-neon-cyan" />
-              )}
-            </button>
+              </button>
 
-            {/* Dropdown Menu - ONLY when logged in */}
-            {isMenuOpen && isLoggedIn && (
-              <div className="absolute right-0 mt-2 w-56 avatar-dropdown rounded-lg shadow-lg py-2 animate-in slide-in-from-top-2 duration-200">
-                <div className="px-4 py-3 border-b border-border/50">
-                  <p className="text-sm font-semibold">{user?.username}</p>
-                  <p className="text-xs text-muted-foreground">{user?.email}</p>
-                </div>
-                
-                <button
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    navigate('/profile');
-                  }}
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
-                >
-                  <User size={16} className="text-muted-foreground" />
-                  Profile
-                </button>
-                
-                <button
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    navigate('/settings');
-                  }}
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
-                >
-                  <Settings size={16} className="text-muted-foreground" />
-                  Settings
-                </button>
-                
-                <button
-                  onClick={() => scrollToSection('about')}
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
-                >
-                  <Info size={16} className="text-muted-foreground" />
-                  About
-                </button>
-                
-                <div className="border-t border-border/50 mt-2 pt-2">
+              {/* Dropdown Menu - Profile, Settings, About, Logout */}
+              {isMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 avatar-dropdown rounded-lg shadow-lg py-2 animate-in slide-in-from-top-2 duration-200">
+                  <div className="px-4 py-3 border-b border-border/50">
+                    <p className="text-sm font-semibold">{user?.username}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  </div>
+                  
                   <button
-                    onClick={handleLogout}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-destructive/10 text-destructive flex items-center gap-3"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      navigate('/profile');
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
                   >
-                    <LogOut size={16} />
-                    Logout
+                    <User size={16} className="text-muted-foreground" />
+                    Profile
                   </button>
+                  
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      navigate('/settings');
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
+                  >
+                    <Settings size={16} className="text-muted-foreground" />
+                    Settings
+                  </button>
+                  
+                  <button
+                    onClick={() => scrollToSection('about')}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
+                  >
+                    <Info size={16} className="text-muted-foreground" />
+                    About
+                  </button>
+                  
+                  <div className="border-t border-border/50 mt-2 pt-2">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-destructive/10 text-destructive flex items-center gap-3"
+                    >
+                      <LogOut size={16} />
+                      Logout
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            {/* When NOT logged in, clicking opens auth modal */}
-            {!isLoggedIn && isMenuOpen && (() => {
-              setTimeout(() => {
-                onAuthOpen();
-                setIsMenuOpen(false);
-              }, 0);
-              return null;
-            })()}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

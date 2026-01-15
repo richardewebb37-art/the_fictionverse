@@ -81,7 +81,7 @@ function App() {
             </Routes>
             
             {/* Bottom Navigation (Mobile App Style) - Darker */}
-            <BottomNavigation />
+            <BottomNavigation onAuthOpen={() => setIsAuthOpen(true)} />
             
             {/* Toast Notifications */}
             <Toaster 

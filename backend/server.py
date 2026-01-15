@@ -640,7 +640,10 @@ async def seed_data():
         ]
         await db.universes.insert_many(sample_universes)
         logger.info("Sample universes seeded successfully")
-        
+    
+    # Seed stories if empty
+    stories_count = await db.stories.count_documents({})
+    if stories_count == 0:
         # Seed sample stories for Neon Shadows
         sample_stories = [
             {

@@ -51,7 +51,13 @@ export const TopBar = ({ onAuthOpen }) => {
         <div className="flex items-center justify-between h-16">
           {/* The Fictionverse Text Logo on Left */}
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => {
+              if (window.location.pathname !== '/') {
+                navigate('/');
+              } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
             className="group"
           >
             <img 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { User, LogOut, Info, Settings, ChevronDown } from 'lucide-react';
+import { User, LogOut, Info, Settings, ChevronDown, Sliders } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const TopBar = ({ onAuthOpen }) => {
@@ -66,33 +66,30 @@ export const TopBar = ({ onAuthOpen }) => {
             />
           </button>
 
-          {/* Icon Menu on Right */}
+          {/* User Menu Dropdown on Right (Always visible) */}
           <div className="relative">
-            {!isLoggedIn ? (
-              <button
-                onClick={onAuthOpen}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted/20 transition-all"
-              >
-                <User size={20} className="text-neon-cyan" />
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted/20 transition-all group"
-                >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-cyan to-neon-blue flex items-center justify-center text-primary-foreground font-semibold text-sm">
-                    {user?.username?.charAt(0).toUpperCase() || 'U'}
-                  </div>
-                  <ChevronDown 
-                    size={16} 
-                    className={`text-muted-foreground transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} 
-                  />
-                </button>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted/20 transition-all group"
+            >
+              {isLoggedIn ? (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-cyan to-neon-blue flex items-center justify-center text-primary-foreground font-semibold text-sm">
+                  {user?.username?.charAt(0).toUpperCase() || 'U'}
+                </div>
+              ) : (
+                <User size={24} className="text-neon-cyan" />
+              )}
+              <ChevronDown 
+                size={16} 
+                className={`text-muted-foreground transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} 
+              />
+            </button>
 
-                {/* Dropdown Menu */}
-                {isMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 avatar-dropdown rounded-lg shadow-lg py-2 animate-in slide-in-from-top-2 duration-200">
+            {/* Dropdown Menu */}
+            {isMenuOpen && (
+              <div className="absolute right-0 mt-2 w-56 avatar-dropdown rounded-lg shadow-lg py-2 animate-in slide-in-from-top-2 duration-200">
+                {isLoggedIn ? (
+                  <>
                     <div className="px-4 py-3 border-b border-border/50">
                       <p className="text-sm font-semibold">{user?.username}</p>
                       <p className="text-xs text-muted-foreground">{user?.email}</p>
@@ -121,6 +118,17 @@ export const TopBar = ({ onAuthOpen }) => {
                     </button>
                     
                     <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        navigate('/settings');
+                      }}
+                      className="w-full px-4 py-3 text-left text-sm hover:bg-muted/50 flex items-center gap-3 pl-8"
+                    >
+                      <Sliders size={14} className="text-muted-foreground" />
+                      <span className="text-xs">Preferences</span>
+                    </button>
+                    
+                    <button
                       onClick={() => scrollToSection('about')}
                       className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
                     >
@@ -137,9 +145,30 @@ export const TopBar = ({ onAuthOpen }) => {
                         Logout
                       </button>
                     </div>
-                  </div>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onAuthOpen();
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3 text-neon-cyan"
+                    >
+                      <User size={16} />
+                      Sign In / Join
+                    </button>
+                    
+                    <button
+                      onClick={() => scrollToSection('about')}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
+                    >
+                      <Info size={16} className="text-muted-foreground" />
+                      About
+                    </button>
+                  </>
                 )}
-              </>
+              </div>
             )}
           </div>
         </div>

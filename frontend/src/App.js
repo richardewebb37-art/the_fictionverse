@@ -17,7 +17,7 @@ import ExplorePage from '@/pages/ExplorePage';
 import StoryReader from '@/pages/StoryReader';
 
 const HomePage = ({ onAuthOpen }) => (
-  <main className="relative z-10 pb-24">
+  <main className="relative z-10 pb-32">
     <HeroSection onAuthOpen={onAuthOpen} />
     <FeaturesSection />
     <UniversesSection />

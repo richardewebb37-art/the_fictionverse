@@ -13,7 +13,7 @@ export const BottomNavigation = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-100 bg-background/20 backdrop-blur-md border-t border-border/30 py-3">
+    <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-background/20 backdrop-blur-md border-t border-border/30 py-3">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-around max-w-2xl mx-auto">
           {navItems.map((item, index) => {

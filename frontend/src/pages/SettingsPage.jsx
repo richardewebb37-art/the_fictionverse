@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { 
-  Settings as SettingsIcon, Moon, Sun, Bell, Shield, 
+  Settings as SettingsIcon, Bell, Shield, 
   Palette, Eye, ChevronLeft, Save
 } from 'lucide-react';
 import { toast } from 'sonner';

@@ -105,19 +105,17 @@ export const TopBar = ({ onAuthOpen }) => {
                   Profile
                 </button>
                 
-                {isLoggedIn && (
-                  <button
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      navigate('/settings');
-                    }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
-                    data-testid="menu-settings"
-                  >
-                    <Settings size={16} className="text-muted-foreground" />
-                    Settings
-                  </button>
-                )}
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    navigate('/settings');
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm hover:bg-muted/50 flex items-center gap-3"
+                  data-testid="menu-settings"
+                >
+                  <Settings size={16} className="text-muted-foreground" />
+                  Settings
+                </button>
                 
                 <button
                   onClick={() => scrollToSection('about')}

@@ -48,24 +48,7 @@ export const TopBar = ({ onAuthOpen }) => {
   return (
     <div className="fixed top-0 left-0 w-full z-50 bg-background/20 backdrop-blur-md border-b border-border/30">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo on Left */}
-          <button 
-            onClick={() => navigate('/')}
-            className="flex items-center gap-3 group"
-          >
-            <img 
-              src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/onoodm24_1000050916.png"
-              alt="The Fictionverse Icon"
-              className="w-8 h-8 object-contain group-hover:scale-110 transition-transform"
-            />
-            <img 
-              src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/mpsnr4h5_f7008c300cfa4c46b66a7797a6a674de.png"
-              alt="The Fictionverse"
-              className="h-8 object-contain group-hover:opacity-80 transition-opacity hidden sm:block"
-            />
-          </button>
-
+        <div className="flex items-center justify-end h-16">
           {/* User Menu Dropdown on Right (Always visible) */}
           <div className="relative">
             <button

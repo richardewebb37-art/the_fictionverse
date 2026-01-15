@@ -5,16 +5,11 @@ export const BottomNavigation = ({ onAuthOpen }) => {
   const navigate = useNavigate();
   
   const navItems = [
-    { icon: Home, action: () => navigate('/'), position: 'left' },
-    { icon: Users, action: () => navigate('/community'), position: 'left' },
-    { 
-      type: 'logo', 
-      action: onAuthOpen, 
-      position: 'center',
-      isCenter: true 
-    },
-    { icon: BookOpen, action: () => navigate('/explore'), position: 'center', isCenter: true },
-    { icon: Trophy, action: () => navigate('/challenges'), position: 'right' },
+    { icon: Home, action: () => navigate('/'), label: 'Home' },
+    { icon: Users, action: () => navigate('/community'), label: 'Community' },
+    { type: 'logo', action: onAuthOpen },
+    { icon: BookOpen, action: () => navigate('/explore'), label: 'Explore' },
+    { icon: Trophy, action: () => navigate('/challenges'), label: 'Challenges' },
   ];
 
   return (
@@ -27,12 +22,12 @@ export const BottomNavigation = ({ onAuthOpen }) => {
                 <button
                   key={index}
                   onClick={item.action}
-                  className="flex items-center justify-center w-16 h-16 -mt-8 rounded-full bg-gradient-to-br from-neon-cyan to-neon-blue shadow-lg hover:shadow-neon hover:scale-110 transition-all"
+                  className="flex items-center justify-center w-14 h-14 hover:scale-110 transition-transform"
                 >
                   <img 
                     src="https://customer-assets.emergentagent.com/job_storyworlds/artifacts/onoodm24_1000050916.png"
-                    alt="FV Logo"
-                    className="w-10 h-10 object-contain"
+                    alt="The Fictionverse"
+                    className="w-full h-full object-contain hover:opacity-80 transition-opacity"
                   />
                 </button>
               );
@@ -43,15 +38,11 @@ export const BottomNavigation = ({ onAuthOpen }) => {
               <button
                 key={index}
                 onClick={item.action}
-                className={`flex items-center justify-center transition-all ${
-                  item.isCenter 
-                    ? 'w-16 h-16 -mt-8 rounded-full bg-gradient-to-br from-neon-cyan to-neon-blue shadow-lg hover:shadow-neon hover:scale-110' 
-                    : 'w-12 h-12 hover:scale-110'
-                }`}
+                className="flex items-center justify-center w-12 h-12 hover:scale-110 transition-transform"
               >
                 <Icon 
-                  size={item.isCenter ? 28 : 24}
-                  className={item.isCenter ? 'text-primary-foreground' : 'text-neon-cyan hover:text-neon-blue transition-colors'}
+                  size={24}
+                  className="text-neon-cyan hover:text-neon-blue transition-colors"
                 />
               </button>
             );

@@ -15,6 +15,9 @@ import { SettingsSection } from '@/components/SettingsSection';
 import { Footer } from '@/components/Footer';
 import ExplorePage from '@/pages/ExplorePage';
 import StoryReader from '@/pages/StoryReader';
+import CommunityPage from '@/pages/CommunityPage';
+import ChallengesPage from '@/pages/ChallengesPage';
+import ProfilePage from '@/pages/ProfilePage';
 
 const HomePage = ({ onAuthOpen }) => (
   <main className="relative z-10 pb-32">
@@ -72,6 +75,9 @@ function App() {
               <Route path="/" element={<HomePage onAuthOpen={() => setIsAuthOpen(true)} />} />
               <Route path="/explore" element={<ExplorePage />} />
               <Route path="/read/:universeId/:chapterNum" element={<StoryReader />} />
+              <Route path="/community" element={<CommunityPage />} />
+              <Route path="/challenges" element={<ChallengesPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Routes>
             
             {/* Bottom Navigation (Mobile App Style) - Darker */}

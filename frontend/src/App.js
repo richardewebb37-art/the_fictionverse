@@ -81,6 +81,7 @@ function App() {
               <Route path="/community" element={<CommunityPage />} />
               <Route path="/challenges" element={<ChallengesPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/settings" element={<SettingsPage />} />
             </Routes>
             
             {/* Bottom Navigation (Mobile App Style) - Darker */}

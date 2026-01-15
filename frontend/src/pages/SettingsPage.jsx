@@ -35,26 +35,6 @@ export const SettingsPage = () => {
     });
   };
 
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen pt-20 pb-32 flex items-center justify-center">
-        <div className="glass-card p-12 text-center max-w-md" data-testid="settings-login-required">
-          <SettingsIcon className="text-neon-cyan mx-auto mb-6" size={64} />
-          <h2 className="text-3xl font-bold mb-4">Sign In Required</h2>
-          <p className="text-muted-foreground mb-6">
-            Please sign in to access settings
-          </p>
-          <Button 
-            onClick={() => navigate('/')}
-            className="btn-glow bg-neon-cyan text-primary-foreground hover:bg-neon-blue"
-          >
-            Return Home
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen pt-20 pb-32" data-testid="settings-page">
       <div className="container mx-auto max-w-3xl px-4">

@@ -744,7 +744,10 @@ async def seed_data():
         ]
         await db.clubs.insert_many(sample_clubs)
         logger.info("Sample clubs seeded successfully")
-        
+    
+    # Seed forum posts if empty
+    forum_count = await db.forum_posts.count_documents({})
+    if forum_count == 0:
         # Seed sample forum posts
         sample_forum_posts = [
             {

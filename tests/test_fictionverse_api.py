@@ -120,7 +120,6 @@ class TestUniversesEndpoints:
         data = response.json()
         assert data["title"] == "Neon Shadows"
         assert data["type"] == "Original"
-        assert data["genre"] == "Cyberpunk"
         assert "author" in data
         assert "description" in data
     

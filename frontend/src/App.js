@@ -15,6 +15,7 @@ import { SettingsSection } from '@/components/SettingsSection';
 import { Footer } from '@/components/Footer';
 import ExplorePage from '@/pages/ExplorePage';
 import StoryReader from '@/pages/StoryReader';
+import UniversePage from '@/pages/UniversePage';
 import CommunityPage from '@/pages/CommunityPage';
 import ChallengesPage from '@/pages/ChallengesPage';
 import ProfilePage from '@/pages/ProfilePage';

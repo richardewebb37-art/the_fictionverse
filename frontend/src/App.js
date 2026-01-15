@@ -75,6 +75,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage onAuthOpen={() => setIsAuthOpen(true)} />} />
               <Route path="/explore" element={<ExplorePage />} />
+              <Route path="/universe/:universeId" element={<UniversePage />} />
               <Route path="/read/:universeId/:chapterNum" element={<StoryReader />} />
               <Route path="/community" element={<CommunityPage />} />
               <Route path="/challenges" element={<ChallengesPage />} />

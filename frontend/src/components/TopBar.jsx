@@ -79,7 +79,7 @@ export const TopBar = ({ onAuthOpen }) => {
 
             {/* Dropdown Menu - Profile, Settings, About, Logout */}
             {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-background/20 backdrop-blur-md border border-border/30 rounded-lg shadow-lg py-2 animate-in slide-in-from-top-2 duration-200">
+              <div className="absolute right-0 mt-2 w-56 bg-background/90 backdrop-blur-md border border-border/30 rounded-lg shadow-lg py-2 animate-in slide-in-from-top-2 duration-200">
                 {isLoggedIn && user && (
                   <div className="px-4 py-3 border-b border-border/50">
                     <p className="text-sm font-semibold">{user.username}</p>
